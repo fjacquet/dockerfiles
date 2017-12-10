@@ -6,7 +6,6 @@ set -o pipefail
 # are running more than one validate bundlescript
 VALIDATE_REPO='https://github.com/fjacquet/dockerfiles.git'
 VALIDATE_BRANCH='master'
-
 VALIDATE_HEAD="$(git rev-parse --verify HEAD)"
 
 git fetch -q "$VALIDATE_REPO" "refs/heads/$VALIDATE_BRANCH"
