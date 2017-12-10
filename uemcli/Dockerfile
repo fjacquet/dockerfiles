@@ -1,5 +1,4 @@
 # This is EMC Unity Command line tools
-# it is IPv4 only
 # docker build . -t uemcli:4.2.1-2069 --compress --squash
 # docker run -ti uemcli:4.2.1-2069
 FROM centos:latest

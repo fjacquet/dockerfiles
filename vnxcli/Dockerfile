@@ -1,5 +1,4 @@
 # This is EMC VNX Command line tools
-# it is IPv4 only
 # docker build . -t vnxcli:7.33-84 --compress --squash
 # docker run -ti vnxcli:7.33-84
 FROM centos:latest
