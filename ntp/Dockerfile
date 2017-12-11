@@ -5,7 +5,6 @@
 FROM centos:latest
 MAINTAINER Frederic Jacquet <fred@ljf.ch>
 # install main packages:
-ADD container-image-root /
 RUN yum install -y deltarpm ntp ntp-utils  && yum -y update && yum -y clean all && rm -rf /var/cache/yum
 #ENTRYPOINT [ "/"]
 ENTRYPOINT ["/usr/sbin/ntpd"]
