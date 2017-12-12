@@ -3,7 +3,7 @@
 # docker build . -t ntp --compress --rm  --squash
 # docker run -ti ntp
 FROM centos:latest
-MAINTAINER Frederic Jacquet <fred@ljf.ch>
+LABEL maintainer Frederic Jacquet <fred@ljf.ch>
 # install main packages:
 RUN yum install -y deltarpm ntp ntp-utils  && yum -y update && yum -y clean all && rm -rf /var/cache/yum
 #ENTRYPOINT [ "/"]

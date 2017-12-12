@@ -2,7 +2,7 @@
 # docker build . -t uemcli:4.2.1-2069 --compress --squash
 # docker run -ti uemcli:4.2.1-2069
 FROM centos:latest
-MAINTAINER Frederic Jacquet <fred@ljf.ch>
+LABEL maintainer Frederic Jacquet <fred@ljf.ch>
 # install main packages:
 ADD container-image-root /
 ENV PATH /opt/emc/uemcli/bin/:$PATH

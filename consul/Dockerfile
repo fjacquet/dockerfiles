@@ -1,5 +1,5 @@
 FROM alpine:3.5
-MAINTAINER Frederic Jacquet <fred@ljf.ch>
+LABEL maintainer Frederic Jacquet <fred@ljf.ch>
 
 ENV PATH /go/bin:/usr/local/go/bin:$PATH
 ENV GOPATH /go

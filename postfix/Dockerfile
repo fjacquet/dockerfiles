@@ -1,7 +1,7 @@
 # docker build . -t postfix --compress --squash
 # docker run -ti postfix
 FROM alpine:edge
-MAINTAINER Frederic Jacquet <fred@ljf.ch>
+LABEL maintainer Frederic Jacquet <fred@ljf.ch>
 
 RUN apk add --no-cache \
 	bash \
