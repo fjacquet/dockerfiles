@@ -5,9 +5,9 @@ yum install -y deltarpm firewalld policycoreutils-python zlib bzip2 openssl libx
 # firewall-cmd --permanent --zone=trusted --add-port=4369/tcp
 # firewall-cmd --permanent --add-port=8440/tcp
 # firewall-cmd --reload
-tar xzvf ./IBM_Spectrum_Control_Base_Edition-3.2.1-9432-x86_64.tar.gz
-rpm -ivh  ./IBM_Spectrum_Control_Base_Edition-3.2.1-9432-x86_64/rhel7/*.rpm
-chmod +x ./IBM_Spectrum_Control_Base_Edition-3.2.1-9432-x86_64/ibm_spectrum_control-3.2.1-9432-x86_64.bin
-yes 1 | ./IBM_Spectrum_Control_Base_Edition-3.2.1-9432-x86_64/ibm_spectrum_control-3.2.1-9432-x86_64.bin
-rm -rf ./IBM_Spectrum_Control_Base_Edition-3.2.1*
+#tar xzvf ./IBM_Spectrum_Control_Base_Edition-3.2.1-9432-x86_64.tar.gz
+rpm -ivh  /tmp/IBM_Spectrum_Control_Base_Edition-3.2.1-9432-x86_64/rhel7/*.rpm
+chmod +x /tmp/IBM_Spectrum_Control_Base_Edition-3.2.1-9432-x86_64/ibm_spectrum_control-3.2.1-9432-x86_64.bin
+yes 1 | /tmp/IBM_Spectrum_Control_Base_Edition-3.2.1-9432-x86_64/ibm_spectrum_control-3.2.1-9432-x86_64.bin
+rm -rf /tmp/IBM_Spectrum_Control_Base_Edition-3.2.1*
 exit 0
