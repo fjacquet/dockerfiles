@@ -11,7 +11,7 @@ set -e
 # to Consul.
 CONSUL_BIND=
 if [ -n "$CONSUL_BIND_INTERFACE" ]; then
-  CONSUL_BIND_ADDRESS=$(ip -o -4 addr list $CONSUL_BIND_INTERFACE | head -n1 | awk '{print $4}' | cut -d/ -f1)
+  CONSUL_BIND_ADDRESS=$(ip -o -4 addr list "$CONSUL_BIND_INTERFACE" | head -n1 | awk '{print $4}' | cut -d/ -f1)
   if [ -z "$CONSUL_BIND_ADDRESS" ]; then
     echo "Could not find IP for interface '$CONSUL_BIND_INTERFACE', exiting"
     exit 1
@@ -26,7 +26,7 @@ fi
 # pass the proper -client= option along to Consul.
 CONSUL_CLIENT=
 if [ -n "$CONSUL_CLIENT_INTERFACE" ]; then
-  CONSUL_CLIENT_ADDRESS=$(ip -o -4 addr list $CONSUL_CLIENT_INTERFACE | head -n1 | awk '{print $4}' | cut -d/ -f1)
+  CONSUL_CLIENT_ADDRESS=$(ip -o -4 addr list "$CONSUL_CLIENT_INTERFACE" | head -n1 | awk '{print $4}' | cut -d/ -f1)
   if [ -z "$CONSUL_CLIENT_ADDRESS" ]; then
     echo "Could not find IP for interface '$CONSUL_CLIENT_INTERFACE', exiting"
     exit 1
@@ -61,8 +61,8 @@ if [ "$1" = 'agent' ]; then
     set -- consul agent \
         -data-dir="$CONSUL_DATA_DIR" \
         -config-dir="$CONSUL_CONFIG_DIR" \
-        $CONSUL_BIND \
-        $CONSUL_CLIENT \
+        "$CONSUL_BIND" \
+        "$CONSUL_CLIENT" \
         "$@"
 elif [ "$1" = 'version' ]; then
     # This needs a special case because there's no help output.
@@ -87,7 +87,7 @@ if [ "$1" = 'consul' ]; then
     # If requested, set the capability to bind to privileged ports before
     # we drop to the non-root user. Note that this doesn't work with all
     # storage drivers (it won't work with AUFS).
-    if [ ! -z ${CONSUL_ALLOW_PRIVILEGED_PORTS+x} ]; then
+    if [ ! -z "${CONSUL_ALLOW_PRIVILEGED_PORTS+x}" ]; then
         setcap "cap_net_bind_service=+ep" /bin/consul
     fi
 
