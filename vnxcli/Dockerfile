@@ -2,11 +2,7 @@
 # docker build . -t vnxcli:7.33-84 --compress --squash
 # docker run -ti vnxcli:7.33-84
 FROM centos:latest
-<<<<<<< HEAD
 LABEL maintainer Frederic Jacquet <fred@ljf.ch>
-=======
-MAINTAINER Frederic Jacquet <fred@ljf.ch>
->>>>>>> refs/remotes/origin/master
 # install main packages:
 ADD container-image-root /
 ENV PATH /opt/Navisphere/bin:$PATH
