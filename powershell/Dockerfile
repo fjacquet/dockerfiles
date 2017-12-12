@@ -1,5 +1,5 @@
 FROM centos:latest
-LABEL maintainer Frederic Jacquet <fred@ljf.ch>
+LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 # Register the Microsoft RedHat repository
 RUN cd  /etc/yum.repos.d/ && curl -L -O https://packages.microsoft.com/config/rhel/7/prod.repo 
 RUN yum install -y deltarpm powershell unzip  && yum -y update && yum clean all 

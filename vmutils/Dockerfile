@@ -2,7 +2,7 @@
 # docker build . -t vmutils --compress --rm --squash
 # docker run -ti vmutils
 FROM ubuntu:artful
-LABEL maintainer Frederic Jacquet <fred@ljf.ch>
+LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 # Set the working directory to /root
 WORKDIR /root
 VOLUME "/root/src"
