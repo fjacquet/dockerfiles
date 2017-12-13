@@ -4,6 +4,6 @@
 FROM centos:latest
 LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 # install main packages:
-RUN yum install -y deltarpm net-snmp nmap net-snmp-utils  && yum -y update && yum clean all
+RUN yum install -y --setopt=tsflags=nodocs deltarpm net-snmp nmap net-snmp-utils  && yum -y update && yum clean all
 #ENTRYPOINT [ "/"]
 CMD [ "/bin/bash" ]

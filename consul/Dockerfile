@@ -1,5 +1,5 @@
 FROM alpine:3.6
-LABEL MAINTAINER="James Phillips <james@hashicorp.com> (@slackpad)"
+LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 
 # This is the release of Consul to pull in.
 ENV CONSUL_VERSION=1.0.1
