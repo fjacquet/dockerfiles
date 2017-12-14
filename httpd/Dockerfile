@@ -3,6 +3,7 @@
 # docker run -ti httpd
 FROM centos:latest
 LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>" 
+VOLUME ["/var/www/html"]
 RUN yum -y --setopt=tsflags=nodocs update && \
     yum -y --setopt=tsflags=nodocs install httpd && \
     yum clean all
