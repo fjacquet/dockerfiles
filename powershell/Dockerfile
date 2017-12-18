@@ -9,6 +9,9 @@ RUN pwsh -ex unrestricted -noni -Command Set-PSRepository -Name PSGallery -Insta
 RUN pwsh -ex unrestricted -noni -Command Install-Module -name PSExcel 
 RUN pwsh -ex unrestricted -noni -Command Install-Module -name VMware.PowerCLI
 RUN pwsh -ex unrestricted -noni -Command Install-Module -Name PowerNSX 
+RUN pwsh -ex unrestricted -noni -Command Install-Module -Name VPLEX-Powershell  
+RUN pwsh -ex unrestricted -noni -Command Install-Module -Name Unity-Powershell 
+RUN pwsh -ex unrestricted -noni -Command Install-Module -Name IsilonPlatform 
 # Start PowerShell
 ENTRYPOINT [ "pwsh" ]
 #CMD [ "/bin/bash" ]

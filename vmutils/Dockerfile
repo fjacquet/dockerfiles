@@ -61,6 +61,9 @@ RUN mkdir -p /root/.local/share/powershell/Modules && unzip /tmp/ucspowertoolcor
 RUN pwsh -ex unrestricted -noni -Command Set-PSRepository -Name PSGallery -InstallationPolicy Trusted 
 RUN pwsh -ex unrestricted -noni -Command Install-Module -name VMware.PowerCLI
 RUN pwsh -ex unrestricted -noni -Command Install-Module -name PowerNSX
+RUN pwsh -ex unrestricted -noni -Command Install-Module -Name VPLEX-Powershell  
+RUN pwsh -ex unrestricted -noni -Command Install-Module -Name Unity-Powershell 
+RUN pwsh -ex unrestricted -noni -Command Install-Module -Name IsilonPlatform 
 RUN echo "alias start-usc=pwsh –NoExit –File ~/.local/share/powershell/Modules/Start-UcsPowerTool.ps1" >> ./.bashrc   
 # Run Bash when the image starts
 CMD ["/bin/bash"]
