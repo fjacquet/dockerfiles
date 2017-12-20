@@ -73,7 +73,7 @@ $ docker run -i \
 ```
 
  Access MySQL from your host computer
- 
+
 ```bash
 $ mysql --user=root --password=my-secret-pw --host=127.0.0.1 -e 'show databases;'
 ```
