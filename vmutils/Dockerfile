@@ -10,11 +10,11 @@ ENV http_proxy ""
 ENV ftp_proxy ""
 ENV TZ=Europe/Zurich
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-ADD VMware-vSphere-CLI-6.5.0-4566394.x86_64.tar.gz /tmp/
+ADD compchecker_v1_8951845.zip /tmp/
 ADD VMware-ovftool-4.2.0-5965791-lin.x86_64.bundle /tmp/
 ADD VMware-vix-disklib-6.5.2-6195444.x86_64.tar.gz /tmp/
 ADD VMware_vRealize_CloudClient-4.4.0-5511232.zip /tmp/
-ADD compchecker_v1_8951845.zip /tmp/
+ADD VMware-vSphere-CLI-6.5.0-4566394.x86_64.tar.gz /tmp/
 
 RUN apt-get -y update 
 RUN apt-get install -yq gnupg2 curl

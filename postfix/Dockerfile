@@ -1,6 +1,6 @@
 # docker build . -t postfix --compress --squash
 # docker run -ti postfix
-FROM alpine:edge
+FROM alpine:latest
 LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 
 RUN apk add --no-cache \
