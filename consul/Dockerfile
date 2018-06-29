@@ -19,7 +19,7 @@ EXPOSE 8300
 # Serf LAN and WAN (WAN is used only by Consul servers) are used for gossip between
 # Consul agents. LAN is within the datacenter and WAN is between just the Consul
 # servers in all datacenters.
-EXPOSE 8301 8301/udp 8302 8302/udp
+EXPOSE 8301 8301/udp 8302 8302/udp 
 # HTTP and DNS (both TCP and UDP) are the primary interfaces that applications
 # use to interact with Consul.
 EXPOSE 8500 8600 8600/udp
@@ -32,10 +32,6 @@ RUN gpg --keyserver hkp://p80.pool.sks-keyservers.net:80  --recv-keys 91A6E7F85D
 RUN mkdir -p /tmp/build 
 WORKDIR /tmp/build    
 RUN wget ${HASHICORP_RELEASES}/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip && \
-    wget ${HASHICORP_RELEASES}/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_SHA256SUMS && \
-    wget ${HASHICORP_RELEASES}/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_SHA256SUMS.sig  && \
-    gpg --batch --verify consul_${CONSUL_VERSION}_SHA256SUMS.sig consul_${CONSUL_VERSION}_SHA256SUMS && \
-    grep consul_${CONSUL_VERSION}_linux_amd64.zip consul_${CONSUL_VERSION}_SHA256SUMS | sha256sum -c && \
     unzip -d /bin consul_${CONSUL_VERSION}_linux_amd64.zip 
 WORKDIR /tmp
 RUN rm -rf /tmp/build && \
