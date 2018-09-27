@@ -8,11 +8,11 @@ WORKDIR /root
 VOLUME "/root/src"
 ENV http_proxy ""
 ENV ftp_proxy  ""
-ADD compchecker_v1_8951845.zip /root/
-RUN apk update && apk upgrade && apk add --no-cache python3 bash python3-dev  linux-headers libc-dev gcc openssl openssl-dev libffi-dev
+ADD compchecker_v1_10066133.zip /root/
+RUN apk update && apk upgrade && apk add --no-cache python3 bash python3-dev linux-headers libc-dev gcc openssl openssl-dev libffi-dev
 RUN python3 -m ensurepip
 RUN pip3 install --upgrade pip
-RUN unzip /root/compchecker_v1_8951845.zip 
+RUN unzip /root/compchecker_v1_10066133.zip  && rm /root/compchecker_v1_10066133.zip 
 # Install prereq
 RUN pip3 install pyVim pyvmomi crypto pyopenssl
 # Run Bash when the image starts
