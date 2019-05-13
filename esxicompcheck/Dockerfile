@@ -1,19 +1,20 @@
 # This is VMware Command line tools and contrib
 # docker build . -t esxicompcheck --compress --rm --squash
 # docker run -ti esxicompcheck
-FROM alpine:latest
+FROM photon:3.0
 LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 # Set the working directory to /root
 WORKDIR /root
 VOLUME "/root/src"
 ENV http_proxy ""
 ENV ftp_proxy  ""
-ADD compchecker_v1_8951845.zip /root/
-RUN apk update && apk upgrade && apk add --no-cache python3 bash python3-dev  linux-headers libc-dev gcc openssl openssl-dev libffi-dev
-RUN python3 -m ensurepip
-RUN pip3 install --upgrade pip
-RUN unzip /root/compchecker_v1_8951845.zip 
+# RUN tdnf update -y
+RUN tdnf install -y python3 python3-xml bash python3-devel unzip linux-headers libc-devel gcc openssl openssl-devel libffi-devel
+RUN python3 -m ensurepip && pip3 install --upgrade pip && pip3 install pyVim pyvmomi crypto pyopenssl
 # Install prereq
-RUN pip3 install pyVim pyvmomi crypto pyopenssl
+
+ADD compchecker_v1_10066133.zip /root/
+RUN unzip /root/compchecker_v1_10066133.zip && rm /root/compchecker_v1_10066133.zip
+
 # Run Bash when the image starts
 CMD ["/bin/bash"]
