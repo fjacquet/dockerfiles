@@ -2,7 +2,7 @@
 # docker run -ti postfix
 FROM alpine:latest
 LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
-
+EXPOSE 25
 RUN apk add --no-cache \
 	bash \
 	ca-certificates \
@@ -19,4 +19,3 @@ COPY rsyslog.conf /etc/rsyslog.conf
 STOPSIGNAL SIGKILL
 
 ENTRYPOINT ["/usr/sbin/runit_bootstrap"]
-EXPOSE 25

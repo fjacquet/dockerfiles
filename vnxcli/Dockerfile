@@ -2,6 +2,7 @@
 # docker build . -t vnxcli:7.33-84 --compress --squash
 # docker run -ti vnxcli:7.33-84
 FROM centos:latest
+LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>" 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG VCS_REF
