@@ -6,6 +6,7 @@ LABEL maintainer Frederic Jacquet <fred@ljf.ch>
 VOLUME [ "/sys/fs/cgroup" ]
 # install main packages:
 ADD container-image-root/IBM_Spectrum_Control_Base_Edition-3.2.1-9432-x86_64.tar.gz /tmp
+
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
 systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
