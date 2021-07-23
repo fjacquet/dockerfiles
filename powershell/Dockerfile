@@ -2,7 +2,7 @@
 # This is VMware Command line tools and contrib
 # docker build . -t powershell --compress --rm --squash
 # docker run -ti powershell
-FROM centos:7.5.1804
+FROM centos:7
 LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 # Register the Microsoft RedHat repository
 WORKDIR /etc/yum.repos.d
