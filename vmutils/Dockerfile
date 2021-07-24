@@ -1,7 +1,7 @@
 # This is VMware Command line tools and contrib
 # docker build . -t vmutils --compress --rm --squash
 # docker run -ti vmutils
-FROM  ubuntu:latest
+FROM  ubuntu:20.10
 LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 # Set the working directory to /root
 WORKDIR /root
