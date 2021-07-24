@@ -4,14 +4,15 @@
 FROM centos:latest
 LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 # install main packages:
-RUN yum install -y --setopt=tsflags=nodocs deltarpm ntp ntp-utils \
-      && yum -y --setopt=tsflags=nodocs update \
-      && yum -y clean all && rm -rf /var/cache/yum
+RUN dnf -y update
+RUN dnf install -y chrony \
+      && dnf -y clean all
 #ENTRYPOINT [ "/"]
-ENTRYPOINT ["/usr/sbin/ntpd"]
-CMD ["-n", "-b", "-g", "-l", "stdout"]
+# CMD ["/bin/bash"]
+ENTRYPOINT ["/usr/sbin/chronyd"]
+CMD ["-d", "/etc/chrony.conf "]
 EXPOSE 123
 
 LABEL RUN="docker run -d --cap-add='SYS_TIME' --name NAME IMAGE" \
       STOP="docker stop NAME" \
-      name="ntpd daemon" 
+      name="ntpd daemon"

@@ -2,16 +2,16 @@
 # docker build . -t percona --compress --rm  --squash
 # docker run -ti percona
 FROM centos:latest
-LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>" 
+LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 
 ###
 ### Envs
 ###
-
+RUN dnf -y update
 # Version
 # Check for Updates:
-# https://dev.mysql.com/downloads/repo/yum/
-ENV YUM_REPO_URL="https://www.percona.com/redir/downloads/percona-release/redhat/latest/percona-release-0.1-4.noarch.rpm"
+# https://dev.mysql.com/downloads/repo/dnf/
+ENV dnf_REPO_URL="https://repo.percona.com/yum/percona-release-latest.noarch.rpm"
 
 # User/Group
 ENV MY_USER="mysql"
@@ -39,19 +39,19 @@ RUN groupadd -g ${MY_GID} -r ${MY_GROUP} && \
 	adduser ${MY_USER} -u ${MY_UID} -M -s /sbin/nologin -g ${MY_GROUP}
 
 RUN \
-	yum -y install  --setopt=tsflags=nodocs epel-release && \
-	yum -y install  --setopt=tsflags=nodocs ${YUM_REPO_URL} && \
-	yum clean all
+	dnf -y install  --setopt=tsflags=nodocs epel-release && \
+	dnf -y install  --setopt=tsflags=nodocs ${dnf_REPO_URL} && \
+	dnf clean all
 
-RUN yum -y  --setopt=tsflags=nodocs update && yum -y  --setopt=tsflags=nodocs install \
-	Percona-Server-server-57
+RUN dnf -y  --setopt=tsflags=nodocs update && dnf -y  --setopt=tsflags=nodocs install \
+	percona-server-server
 
 RUN \
-	yum -y autoremove && \
-	yum clean metadata && \
-	yum clean all && \
-	yum -y install  --setopt=tsflags=nodocs hostname && \
-	yum clean all
+	dnf -y autoremove && \
+	dnf clean metadata && \
+	dnf clean all && \
+	dnf -y install  --setopt=tsflags=nodocs hostname && \
+	dnf clean all
 
 
 ##

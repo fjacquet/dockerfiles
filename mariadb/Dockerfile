@@ -2,15 +2,15 @@
 # docker build . -t mariadb --compress --rm  --squash
 # docker run -ti mariadb
 FROM centos:latest
-LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>" 
-
+LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
+RUN dnf -y update
 EXPOSE 3306
 # Place VOLUME statement below all changes to /var/lib/mysql
 VOLUME /var/lib/mysql
 
-RUN yum -y update && yum -y install --setopt=tsflags=nodocs epel-release && \ 
-    yum -y install --setopt=tsflags=nodocs mariadb-server bind-utils pwgen psmisc hostname && \ 
-    yum -y erase vim-minimal && yum clean all && rm -rf /var/cache/yum
+RUN yum -y install epel-release && \
+    yum -y install mariadb-server bind-utils pwgen psmisc hostname && \
+    yum clean all && rm -rf /var/cache/yum
 
 
 # Fix permissions to allow for running on openshift
