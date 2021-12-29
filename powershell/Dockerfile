@@ -17,7 +17,8 @@ WORKDIR /tmp
 # RUN dnf install -y --setopt=tsflags=nodocs deltarpm powershell mono-complete nuget mono-devel unzip wget make git yum-utils dotnet-sdk-2.1.300-rc1-008673.x86_64 && \
 #     dnf -y --setopt=tsflags=nodocs update && \
     # dnf clean all
-RUN dnf install -y drpm powershell unzip wget make git yum-utils  mono-devel dotnet-sdk-5.0 && \
+RUN dnf install -y drpm powershell unzip wget make git yum-utils  mono-devel dotnet-sdk-5.0
+RUN dnf -y update && \
     dnf clean all
 
 # # Install from psgallery
