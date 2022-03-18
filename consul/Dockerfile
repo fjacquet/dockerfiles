@@ -1,6 +1,6 @@
 # docker build . -t consul --compress --squash --rm
 # docker run -ti consul
-FROM alpine:latest
+FROM alpine:3.15
 LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 # This is the release of Consul to pull in.
 ENV CONSUL_VERSION=1.2.0
