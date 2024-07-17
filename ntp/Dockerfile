@@ -1,7 +1,7 @@
 # This is ISC NTP container image dockerfile
 # docker build . -t ntp --compress --rm  --squash
 # docker run -ti ntp
-FROM centos:latest
+FROM almalinux:latest
 LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 # install main packages:
 RUN dnf -y update

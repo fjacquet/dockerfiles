@@ -2,7 +2,7 @@
 # This is VMware Command line tools and contrib
 # docker build . -t powershell --compress --rm --squash
 # docker run -ti powershell
-FROM centos:latest
+FROM almalinux:latest
 LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 # Register the Microsoft RedHat repository
 RUN dnf -y update

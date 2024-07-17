@@ -2,7 +2,7 @@
 # curl -LO http://wordpress.org/latest.tar.gz
 # docker build . -t wordpress --compress --rm  --squash
 # docker run -ti wordpress
-FROM centos:latest
+FROM almalinux:latest
 LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 RUN dnf -y update
 
