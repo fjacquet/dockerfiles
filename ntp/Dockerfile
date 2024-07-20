@@ -1,7 +1,7 @@
 # This is ISC NTP container image dockerfile
 # docker build . -t ntp --compress --rm  --squash
 # docker run -ti ntp
-FROM almalinux:latest
+FROM almalinux:9.3-minimal
 LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 # install main packages:
 RUN dnf -y update
