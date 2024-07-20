@@ -1,7 +1,7 @@
 # This is EMC Unity Command line tools
 # docker build . -t uemcli:4.2.1-2069 --compress --squash --rm
 # docker run -ti uemcli:4.2.1-2069
-FROM almalinux:latest
+FROM almalinux:9.3-minimal
 LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 RUN dnf -y update
 # install main packages:
