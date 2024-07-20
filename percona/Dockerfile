@@ -1,7 +1,7 @@
 # This is basic httpd image dockerfile
 # docker build . -t percona --compress --rm  --squash
 # docker run -ti percona
-FROM almalinux:latest
+FROM almalinux:9.3-minimal
 LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 
 ###
