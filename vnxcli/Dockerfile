@@ -1,7 +1,7 @@
 # This is EMC VNX Command line tools
 # docker build . -t vnxcli:7.33-84 --compress --squash --rm
 # docker run -ti vnxcli:7.33-84
-FROM almalinux:9.3-minimal
+FROM almalinux:latest
 LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 RUN dnf -y update
 # Build-time metadata as defined at http://label-schema.org

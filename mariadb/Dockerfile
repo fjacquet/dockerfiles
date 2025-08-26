@@ -1,7 +1,7 @@
 # This is basic httpd image dockerfile
 # docker build . -t mariadb --compress --rm  --squash
 # docker run -ti mariadb
-FROM almalinux:9.3-minimal
+FROM almalinux:latest
 LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
 RUN dnf -y update
 EXPOSE 3306
