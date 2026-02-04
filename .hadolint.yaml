@@ -1,0 +1,6 @@
+---
+ignored:
+  - DL3008  # apt-get install without version pinning
+  - DL3018  # apk add without version pinning
+  - DL3029  # FROM --platform flag usage
+  - DL3041  # dnf install without version pinning

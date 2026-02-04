@@ -4,7 +4,6 @@ FROM alpine:3 AS builder
 
 ENV CONSUL_VERSION=1.22.3
 
-# hadolint ignore=DL3018
 RUN apk add --no-cache curl unzip && \
     ARCH="$(uname -m)" && \
     case "${ARCH}" in \
@@ -18,7 +17,11 @@ RUN apk add --no-cache curl unzip && \
     rm -f /tmp/consul.zip
 
 FROM alpine:3
-LABEL maintainer="Frederic Jacquet <fred@ljf.ch>"
+LABEL maintainer="Frederic Jacquet <fred@ljf.ch>" \
+      org.opencontainers.image.title="consul" \
+      org.opencontainers.image.description="HashiCorp Consul service mesh" \
+      org.opencontainers.image.authors="Frederic Jacquet <fred@ljf.ch>" \
+      org.opencontainers.image.source="https://github.com/fjacquet/dockerfiles"
 
 VOLUME /consul/data
 
@@ -32,7 +35,6 @@ EXPOSE 8500 8600 8600/udp
 RUN addgroup consul && \
     adduser -S -G consul consul
 
-# hadolint ignore=DL3018
 RUN apk add --no-cache ca-certificates dumb-init su-exec libcap && \
     mkdir -p /consul/data /consul/config && \
     chown -R consul:consul /consul
@@ -40,6 +42,9 @@ RUN apk add --no-cache ca-certificates dumb-init su-exec libcap && \
 COPY --from=builder /tmp/consul /bin/consul
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+    CMD wget -qO /dev/null http://localhost:8500/v1/agent/self || exit 1
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["consul", "agent", "-dev", "-client", "0.0.0.0"]

@@ -1,9 +1,12 @@
 # This is Percona Server image dockerfile
 # docker build . -t percona --rm
 # docker run -ti percona
-# hadolint ignore=DL3029
 FROM --platform=linux/amd64 debian:bookworm-slim
-LABEL maintainer="Frederic Jacquet <fred@ljf.ch>"
+LABEL maintainer="Frederic Jacquet <fred@ljf.ch>" \
+      org.opencontainers.image.title="percona" \
+      org.opencontainers.image.description="Percona Server for MySQL 8.0" \
+      org.opencontainers.image.authors="Frederic Jacquet <fred@ljf.ch>" \
+      org.opencontainers.image.source="https://github.com/fjacquet/dockerfiles"
 
 ###
 ### Envs
@@ -33,7 +36,6 @@ ENV MYSQL_LOG_QUERY="${MYSQL_DEF_LOG}/query.log"
 RUN groupadd -g ${MY_GID} -r ${MY_GROUP} && \
 	useradd -l -u ${MY_UID} -r -s /usr/sbin/nologin -g ${MY_GROUP} ${MY_USER}
 
-# hadolint ignore=DL3008
 RUN apt-get update && \
 	apt-get install -y --no-install-recommends \
 		wget gnupg2 gpgv lsb-release curl ca-certificates procps hostname && \
@@ -125,6 +127,9 @@ VOLUME /var/log/mysql
 VOLUME /var/sock/mysqld
 VOLUME /etc/mysql/conf.d
 VOLUME /etc/mysql/docker-default.d
+
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+    CMD mysqladmin ping --silent || exit 1
 
 ##
 ## Entrypoint

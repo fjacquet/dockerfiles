@@ -4,7 +4,6 @@
 FROM almalinux:10 AS builder
 WORKDIR /root
 
-# hadolint ignore=DL3041
 RUN dnf -y update && \
     dnf -y install python3 python3-devel python3-pip unzip && \
     dnf clean all && \
@@ -17,11 +16,14 @@ RUN pip3 install --no-cache-dir --prefix=/usr/local pyVim pyvmomi crypto pyopens
     rm -f /root/compchecker-v1-20210219.zip
 
 FROM almalinux:10
-LABEL maintainer="Frederic Jacquet <fred@ljf.ch>"
+LABEL maintainer="Frederic Jacquet <fred@ljf.ch>" \
+      org.opencontainers.image.title="esxicompcheck" \
+      org.opencontainers.image.description="VMware ESXi compatibility checker" \
+      org.opencontainers.image.authors="Frederic Jacquet <fred@ljf.ch>" \
+      org.opencontainers.image.source="https://github.com/fjacquet/dockerfiles"
 WORKDIR /root
 VOLUME "/root/src"
 
-# hadolint ignore=DL3041
 RUN dnf -y update && \
     dnf -y install python3 && \
     dnf clean all && \

@@ -5,7 +5,6 @@
 # Stage 1: Install PowerShell and modules
 FROM almalinux:10 AS builder
 ARG PS_VERSION=7.5.4
-# hadolint ignore=DL3041
 RUN dnf -y update && \
     dnf install -y curl tar gzip unzip libicu && \
     dnf clean all && \
@@ -44,9 +43,12 @@ RUN mkdir -p /root/.local/share/powershell/Modules && \
 
 # Stage 2: Minimal runtime
 FROM almalinux:10
-LABEL maintainer="Frederic Jacquet <fred@ljf.ch>"
+LABEL maintainer="Frederic Jacquet <fred@ljf.ch>" \
+      org.opencontainers.image.title="powershell" \
+      org.opencontainers.image.description="PowerShell with VMware, Dell EMC, and AWS modules" \
+      org.opencontainers.image.authors="Frederic Jacquet <fred@ljf.ch>" \
+      org.opencontainers.image.source="https://github.com/fjacquet/dockerfiles"
 # Register the Microsoft RHEL 10 repository for dotnet-sdk
-# hadolint ignore=DL3041
 RUN dnf -y update && \
     dnf install -y curl && \
     curl -sSL -O https://packages.microsoft.com/config/rhel/10/packages-microsoft-prod.rpm && \

@@ -2,7 +2,7 @@
 
 ## Description
 
-Latest version of maria database on centos 7 to provide storage for the test Wordpress container
+MariaDB database server on AlmaLinux 10 to provide storage for the test WordPress container
 
 ## Running
 

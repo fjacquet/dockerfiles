@@ -2,7 +2,7 @@
 
 ## Description
 
-Latest version of percona database on centos 7 to provide a nice storage for redundant projects
+Percona Server for MySQL 8.0 on Debian 12 (Bookworm) to provide storage for redundant projects
 
 ## Running
 
