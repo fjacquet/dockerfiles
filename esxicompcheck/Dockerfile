@@ -1,23 +1,21 @@
-# This is VMware Command line tools and contrib
-# docker build . -t esxicompcheck --compress --rm --squash
+# This is VMware ESXi compatibility checker
+# docker build . -t esxicompcheck --rm
 # docker run -ti esxicompcheck
-FROM photon:latest
-LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
-# Set the working directory to /root
+FROM almalinux:10
+LABEL maintainer="Frederic Jacquet <fred@ljf.ch>"
 WORKDIR /root
 VOLUME "/root/src"
-ENV http_proxy ""
-ENV ftp_proxy  ""
 
-# Install prereq
-ADD compchecker-v1-20210219.zip /root/
-#RUN tdnf update -y
-# RUN tdnf install -y python3 python3-xml bash python3-devel unzip linux-headers libc-devel gcc openssl openssl-devel libffi-devel
-RUN tdnf install -y python3 python3-xml  python3-devel unzip
-#gcc openssl openssl-devel libffi-devel bash
-RUN python3 -m ensurepip && pip3 install --upgrade pip && pip3 install pyVim pyvmomi crypto pyopenssl
-RUN unzip /root/compchecker-v1-20210219.zip && rm /root/compchecker-v1-20210219.zip
+# hadolint ignore=DL3041
+RUN dnf -y update && \
+    dnf -y install python3 python3-devel python3-pip unzip && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
+COPY compchecker-v1-20210219.zip /root/
+# hadolint ignore=DL3013
+RUN pip3 install --no-cache-dir pyVim pyvmomi crypto pyopenssl && \
+    unzip /root/compchecker-v1-20210219.zip && \
+    rm -f /root/compchecker-v1-20210219.zip
 
-# Run Bash when the image starts
 CMD ["/bin/bash"]

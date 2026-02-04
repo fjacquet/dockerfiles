@@ -1,10 +1,11 @@
-# This is a test snmp utils dockerfile
-# docker build . -t snmp --compress --squash
-# docker run -ti snmp --compress --squash
-FROM photon:latest
-LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
-# install main packages:
-RUN tdnf update -y
-RUN tdnf install -y  net-snmp nmap && tdnf clean all  && rm -rf /var/cache/yum
-#ENTRYPOINT [ "/"]
-CMD [ "/bin/bash" ]
+# This is a SNMP utils dockerfile
+# docker build . -t snmp --rm
+# docker run -ti snmp
+FROM almalinux:10
+LABEL maintainer="Frederic Jacquet <fred@ljf.ch>"
+# hadolint ignore=DL3041
+RUN dnf -y update && \
+    dnf -y install net-snmp net-snmp-utils nmap && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
+CMD ["/bin/bash"]

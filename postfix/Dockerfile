@@ -1,8 +1,9 @@
-# docker build . -t postfix --compress --squash
+# docker build . -t postfix --rm
 # docker run -ti postfix
 FROM alpine:3
-LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
+LABEL maintainer="Frederic Jacquet <fred@ljf.ch>"
 EXPOSE 25
+# hadolint ignore=DL3018
 RUN apk add --no-cache \
 	bash \
 	ca-certificates \

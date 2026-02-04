@@ -1,60 +1,39 @@
-# docker build . -t consul --compress --squash --rm
+# docker build . -t consul --rm
 # docker run -ti consul
-FROM alpine:latest
-LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
-# This is the release of Consul to pull in.
-ENV CONSUL_VERSION=1.2.0
-# This is the release of https://github.com/hashicorp/docker-base to pull in order
-# to provide HashiCorp-built versions of basic utilities like dumb-init and gosu.
-ENV DOCKER_BASE_VERSION=0.0.4
-# This is the location of the releases.
-ENV HASHICORP_RELEASES=https://releases.hashicorp.com
-# Create a consul user and group first so the IDs get set the same way, even as
-# the rest of this may change over time.
-# Expose the consul data directory as a volume since there's mutable state in there.
+FROM alpine:3
+LABEL maintainer="Frederic Jacquet <fred@ljf.ch>"
+
+ENV CONSUL_VERSION=1.22.3
+
 VOLUME /consul/data
-# Server RPC is used for communication between Consul clients and servers for internal
-# request forwarding.
+
+# Server RPC
 EXPOSE 8300
-# Serf LAN and WAN (WAN is used only by Consul servers) are used for gossip between
-# Consul agents. LAN is within the datacenter and WAN is between just the Consul
-# servers in all datacenters.
-EXPOSE 8301 8301/udp 8302 8302/udp 
-# HTTP and DNS (both TCP and UDP) are the primary interfaces that applications
-# use to interact with Consul.
+# Serf LAN and WAN
+EXPOSE 8301 8301/udp 8302 8302/udp
+# HTTP and DNS
 EXPOSE 8500 8600 8600/udp
+
 RUN addgroup consul && \
     adduser -S -G consul consul
-WORKDIR /tmp
-# Set up certificates, our base tools, and Consul.
-RUN apk add --no-cache ca-certificates curl gnupg libcap openssl 
-RUN gpg --keyserver hkp://p80.pool.sks-keyservers.net:80  --recv-keys 91A6E7F85D05C65630BEF18951852D87348FFC4C 
-RUN mkdir -p /tmp/build 
-WORKDIR /tmp/build    
-RUN wget ${HASHICORP_RELEASES}/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip && \
-    unzip -d /bin consul_${CONSUL_VERSION}_linux_amd64.zip 
-WORKDIR /tmp
-RUN rm -rf /tmp/build && \
-    apk del gnupg openssl && \
-    rm -rf /root/.gnupg
 
-# The /consul/data dir is used by Consul to store state. The agent will be started
-# with /consul/config as the configuration directory so you can add additional
-# config files in that location.
-RUN mkdir -p /consul/data && \
-    mkdir -p /consul/config && \
+# hadolint ignore=DL3018
+RUN apk add --no-cache ca-certificates curl dumb-init su-exec libcap && \
+    ARCH="$(uname -m)" && \
+    case "${ARCH}" in \
+        x86_64)  CONSUL_ARCH="amd64" ;; \
+        aarch64) CONSUL_ARCH="arm64" ;; \
+        *)       echo "Unsupported arch: ${ARCH}" && exit 1 ;; \
+    esac && \
+    curl -fsSL -o /tmp/consul.zip \
+        "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_${CONSUL_ARCH}.zip" && \
+    unzip -d /bin /tmp/consul.zip && \
+    rm -f /tmp/consul.zip && \
+    mkdir -p /consul/data /consul/config && \
     chown -R consul:consul /consul
 
-
-
-# Consul doesn't need root privileges so we run it as the consul user from the
-# entry point script. The entry point script also uses dumb-init as the top-level
-# process to reap any zombie processes created by Consul sub-processes.
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-ENTRYPOINT ["docker-entrypoint.sh"]
 
-# By default you'll get an insecure single-node development server that stores
-# everything in RAM, exposes a web UI and HTTP endpoints, and bootstraps itself.
-# Don't use this configuration for production.
-CMD ["consul","agent", "-dev", "-client", "0.0.0.0"]
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["consul", "agent", "-dev", "-client", "0.0.0.0"]

@@ -1,15 +1,15 @@
 # This is basic httpd image dockerfile
-# docker build . -t httpd --compress --rm  --squash
+# docker build . -t httpd --rm
 # docker run -ti httpd
-FROM photon:latest
-LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
+FROM almalinux:10
+LABEL maintainer="Frederic Jacquet <fred@ljf.ch>"
 VOLUME ["/var/www/html"]
-RUN tdnf update -y && tdnf install -y httpd && tdnf clean all
-# RUN yum -y --setopt=tsflags=nodocs update && \
-#     yum -y --setopt=tsflags=nodocs install httpd && \
-#     yum clean all
+# hadolint ignore=DL3041
+RUN dnf -y update && \
+    dnf -y install httpd && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 EXPOSE 80
-# Simple startup script to avoid some issues observed with container restart
 COPY scripts/run-httpd.sh /run-httpd.sh
 RUN chmod -v +x /run-httpd.sh
 CMD ["/run-httpd.sh"]

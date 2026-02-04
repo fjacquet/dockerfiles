@@ -1,4 +1,4 @@
-#!/bin/dumb-init /bin/sh
+#!/usr/bin/dumb-init /bin/sh
 set -e
 
 # Note above that we run dumb-init as PID 1 in order to reap zombie processes
@@ -91,7 +91,7 @@ if [ "$1" = 'consul' ]; then
         setcap "cap_net_bind_service=+ep" /bin/consul
     fi
 
-    set -- gosu consul "$@"
+    set -- su-exec consul "$@"
 fi
 
 exec "$@"
