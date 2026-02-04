@@ -1,18 +1,13 @@
-# This is basic httpd image dockerfile
-# docker build . -t percona --compress --rm  --squash
+# This is Percona Server image dockerfile
+# docker build . -t percona --rm
 # docker run -ti percona
-FROM almalinux:latest
-LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
+# hadolint ignore=DL3029
+FROM --platform=linux/amd64 debian:bookworm-slim
+LABEL maintainer="Frederic Jacquet <fred@ljf.ch>"
 
 ###
 ### Envs
 ###
-RUN dnf -y update
-# Version
-# Check for Updates:
-# https://dev.mysql.com/downloads/repo/dnf/
-ENV dnf_REPO_URL="https://repo.percona.com/yum/percona-release-latest.noarch.rpm"
-
 # User/Group
 ENV MY_USER="mysql"
 ENV MY_GROUP="mysql"
@@ -36,23 +31,21 @@ ENV MYSQL_LOG_QUERY="${MYSQL_DEF_LOG}/query.log"
 ### Install
 ###
 RUN groupadd -g ${MY_GID} -r ${MY_GROUP} && \
-	adduser ${MY_USER} -u ${MY_UID} -M -s /sbin/nologin -g ${MY_GROUP}
+	useradd -l -u ${MY_UID} -r -s /usr/sbin/nologin -g ${MY_GROUP} ${MY_USER}
 
-RUN \
-	dnf -y install  --setopt=tsflags=nodocs epel-release && \
-	dnf -y install  --setopt=tsflags=nodocs ${dnf_REPO_URL} && \
-	dnf clean all
-
-RUN dnf -y  --setopt=tsflags=nodocs update && dnf -y  --setopt=tsflags=nodocs install \
-	percona-server-server
-
-RUN \
-	dnf -y autoremove && \
-	dnf clean metadata && \
-	dnf clean all && \
-	dnf -y install  --setopt=tsflags=nodocs hostname && \
-	dnf clean all
-
+# hadolint ignore=DL3008
+RUN apt-get update && \
+	apt-get install -y --no-install-recommends \
+		wget gnupg2 gpgv lsb-release curl ca-certificates procps hostname && \
+	wget -q https://repo.percona.com/apt/percona-release_latest.generic_all.deb && \
+	dpkg -i percona-release_latest.generic_all.deb && \
+	rm -f percona-release_latest.generic_all.deb && \
+	percona-release setup pdps-8.0 && \
+	apt-get update && \
+	apt-get install -y --no-install-recommends percona-server-server && \
+	apt-get purge -y --auto-remove wget gnupg2 lsb-release && \
+	apt-get clean && \
+	rm -rf /var/lib/apt/lists/*
 
 ##
 ## Configure
@@ -113,9 +106,8 @@ RUN \
 	echo "!includedir ${MYSQL_CUST_INCL1}/"                >> /etc/my.cnf && \
 	echo "!includedir ${MYSQL_CUST_INCL2}/"                >> /etc/my.cnf
 
-
 ##
-## Bootstrap Scipts
+## Bootstrap Scripts
 ##
 COPY ./scripts/docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
@@ -125,7 +117,6 @@ RUN chmod +x /docker-entrypoint.sh
 ##
 EXPOSE 3306
 
-
 ##
 ## Volumes
 ##
@@ -133,8 +124,7 @@ VOLUME /var/lib/mysql
 VOLUME /var/log/mysql
 VOLUME /var/sock/mysqld
 VOLUME /etc/mysql/conf.d
-VOLUME etc/mysql/docker-default.d
-
+VOLUME /etc/mysql/docker-default.d
 
 ##
 ## Entrypoint

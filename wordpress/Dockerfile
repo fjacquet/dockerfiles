@@ -1,19 +1,19 @@
 # This is basic wordpress image dockerfile
-# curl -LO http://wordpress.org/latest.tar.gz
-# docker build . -t wordpress --compress --rm  --squash
+# docker build . -t wordpress --rm
 # docker run -ti wordpress
-FROM almalinux:latest
-LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
-RUN dnf -y update
+FROM almalinux:10
+LABEL maintainer="Frederic Jacquet <fred@ljf.ch>"
+# hadolint ignore=DL3041
+RUN dnf -y update && \
+    dnf -y install httpd php php-mysqlnd php-gd openssl psmisc tar curl && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
-RUN dnf -y install httpd php php-mysqlnd php-gd openssl psmisc tar && \
-    dnf clean all && rm -rf /var/cache/yum
-
-ADD scripts /scripts
-RUN curl -LO http://wordpress.org/latest.tar.gz                         && \
-    tar xvzf /latest.tar.gz -C /var/www/html --strip-components=1       && \
-    rm /latest.tar.gz                                                   && \
-    chown -R apache:apache /var/www/                                    && \
+COPY scripts /scripts
+RUN curl -LO https://wordpress.org/latest.tar.gz && \
+    tar xzf /latest.tar.gz -C /var/www/html --strip-components=1 && \
+    rm /latest.tar.gz && \
+    chown -R apache:apache /var/www/ && \
     chmod 755 /scripts/*
 
 EXPOSE 80

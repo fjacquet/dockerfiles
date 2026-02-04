@@ -1,23 +1,23 @@
-# This is basic httpd image dockerfile
-# docker build . -t mariadb --compress --rm  --squash
+# This is basic mariadb image dockerfile
+# docker build . -t mariadb --rm
 # docker run -ti mariadb
-FROM almalinux:latest
-LABEL MAINTAINER="Frederic Jacquet <fred@ljf.ch>"
-RUN dnf -y update
+FROM almalinux:10
+LABEL maintainer="Frederic Jacquet <fred@ljf.ch>"
 EXPOSE 3306
 # Place VOLUME statement below all changes to /var/lib/mysql
 VOLUME /var/lib/mysql
-
-RUN yum -y install epel-release && \
-    yum -y install mariadb-server bind-utils pwgen psmisc hostname && \
-    yum clean all && rm -rf /var/cache/yum
-
+# hadolint ignore=DL3041
+RUN dnf -y update && \
+    dnf -y install epel-release && \
+    dnf -y install mariadb-server bind-utils pwgen psmisc hostname && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
 # Fix permissions to allow for running on openshift
 COPY scripts/fix-permissions.sh /
 COPY scripts/docker-entrypoint.sh /
-RUN chmod +x /fix-permissions.sh /docker-entrypoint.sh
-RUN ./fix-permissions.sh /var/lib/mysql/   && \
+RUN chmod +x /fix-permissions.sh /docker-entrypoint.sh && \
+    ./fix-permissions.sh /var/lib/mysql/ && \
     ./fix-permissions.sh /var/log/mariadb/ && \
     ./fix-permissions.sh /var/run/
 
