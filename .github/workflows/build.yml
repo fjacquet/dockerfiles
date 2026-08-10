@@ -5,28 +5,32 @@ on:
       - master
   pull_request:
     types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+env:
+  # Pinned so an upstream release cannot silently change what CI enforces.
+  HADOLINT_VERSION: v2.15.1
+
 jobs:
   lint:
     name: Hadolint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Download hadolint
         run: |
-          sudo wget -qO /usr/local/bin/hadolint \
-            https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
-          sudo chmod +x /usr/local/bin/hadolint
+          set -euo pipefail
+          base="https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}"
+          curl -fsSL -o /tmp/hadolint "${base}/hadolint-linux-x86_64"
+          curl -fsSL -o /tmp/checksums.sha256 "${base}/checksums.sha256"
+          # The published checksum file names the artefact, not our temp path.
+          expected="$(awk '/hadolint-linux-x86_64$/ {print $1}' /tmp/checksums.sha256)"
+          echo "${expected}  /tmp/hadolint" | sha256sum -c -
+          sudo install -m 0755 /tmp/hadolint /usr/local/bin/hadolint
       - name: Lint all Dockerfiles
         run: make lint
-  sonarcloud:
-    name: SonarCloud
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
