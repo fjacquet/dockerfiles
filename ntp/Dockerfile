@@ -1,7 +1,7 @@
 # This is ISC NTP container image dockerfile
 # docker build . -t ntp --rm
 # docker run -ti ntp
-FROM almalinux:10
+FROM docker.io/library/almalinux:10
 LABEL maintainer="Frederic Jacquet <fred@ljf.ch>" \
       org.opencontainers.image.title="ntp" \
       org.opencontainers.image.description="NTP time synchronization daemon using chrony" \

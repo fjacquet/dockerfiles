@@ -1,7 +1,7 @@
 # This is a SNMP utils dockerfile
 # docker build . -t snmp --rm
 # docker run -ti snmp
-FROM almalinux:10
+FROM docker.io/library/almalinux:10
 LABEL maintainer="Frederic Jacquet <fred@ljf.ch>" \
       org.opencontainers.image.title="snmp" \
       org.opencontainers.image.description="SNMP network management utilities" \

@@ -1,7 +1,7 @@
 # This is basic httpd image dockerfile
 # docker build . -t httpd --rm
 # docker run -ti httpd
-FROM almalinux:10
+FROM docker.io/library/almalinux:10
 LABEL maintainer="Frederic Jacquet <fred@ljf.ch>" \
       org.opencontainers.image.title="httpd" \
       org.opencontainers.image.description="Apache HTTP Server" \

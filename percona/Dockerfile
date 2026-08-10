@@ -1,7 +1,7 @@
 # This is Percona Server image dockerfile
 # docker build . -t percona --rm
 # docker run -ti percona
-FROM --platform=linux/amd64 debian:bookworm-slim
+FROM --platform=linux/amd64 docker.io/library/debian:bookworm-slim
 LABEL maintainer="Frederic Jacquet <fred@ljf.ch>" \
       org.opencontainers.image.title="percona" \
       org.opencontainers.image.description="Percona Server for MySQL 8.0" \

@@ -1,7 +1,7 @@
 # This is basic wordpress image dockerfile
 # docker build . -t wordpress --rm
 # docker run -ti wordpress
-FROM almalinux:10 AS builder
+FROM docker.io/library/almalinux:10 AS builder
 
 RUN dnf -y update && \
     dnf -y install curl tar gzip && \
@@ -12,7 +12,7 @@ RUN curl -LO https://wordpress.org/latest.tar.gz && \
     tar xzf /latest.tar.gz -C /tmp && \
     rm -f /latest.tar.gz
 
-FROM almalinux:10
+FROM docker.io/library/almalinux:10
 LABEL maintainer="Frederic Jacquet <fred@ljf.ch>" \
       org.opencontainers.image.title="wordpress" \
       org.opencontainers.image.description="WordPress CMS with Apache and PHP" \
