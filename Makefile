@@ -1,7 +1,12 @@
 IMAGES := consul esxicompcheck httpd mariadb ntp percona postfix powershell snmp uemcli vnxcli wordpress
 HADOLINT := hadolint
 
-.PHONY: all lint build clean help $(addprefix build-,$(IMAGES)) $(addprefix lint-,$(IMAGES))
+# lint-% and build-% are deliberately absent here: make never searches implicit
+# or pattern rules for a target declared .PHONY, so listing them made every
+# `make lint` / `make build` report "Nothing to be done" and silently do zero
+# work. .SECONDARY has the same "always out of date" effect without that.
+.PHONY: all lint build clean help
+.SECONDARY:
 
 all: lint
 
