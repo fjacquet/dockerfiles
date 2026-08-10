@@ -1,10 +1,10 @@
 # This is Percona Server image dockerfile
 # docker build . -t percona --rm
 # docker run -ti percona
-FROM --platform=linux/amd64 docker.io/library/debian:bookworm-slim
+FROM --platform=linux/amd64 docker.io/library/debian:trixie-slim
 LABEL maintainer="Frederic Jacquet <fred@ljf.ch>" \
       org.opencontainers.image.title="percona" \
-      org.opencontainers.image.description="Percona Server for MySQL 8.0" \
+      org.opencontainers.image.description="Percona Server for MySQL 8.4 LTS" \
       org.opencontainers.image.authors="Frederic Jacquet <fred@ljf.ch>" \
       org.opencontainers.image.source="https://github.com/fjacquet/dockerfiles"
 
@@ -42,7 +42,7 @@ RUN apt-get update && \
 	wget -q https://repo.percona.com/apt/percona-release_latest.generic_all.deb && \
 	dpkg -i percona-release_latest.generic_all.deb && \
 	rm -f percona-release_latest.generic_all.deb && \
-	percona-release setup pdps-8.0 && \
+	percona-release enable ps-84-lts release && \
 	apt-get update && \
 	apt-get install -y --no-install-recommends percona-server-server && \
 	apt-get purge -y --auto-remove wget gnupg2 lsb-release && \

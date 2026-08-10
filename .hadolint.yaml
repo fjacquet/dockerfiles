@@ -4,3 +4,6 @@ ignored:
   - DL3018  # apk add without version pinning
   - DL3029  # FROM --platform flag usage
   - DL3041  # dnf install without version pinning
+  # Only our HEALTHCHECKs use shell form, and they need a shell for the
+  # `|| exit 1` fallback. Every ENTRYPOINT and CMD here is already JSON.
+  - DL3025  # CMD/ENTRYPOINT not in JSON notation

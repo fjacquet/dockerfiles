@@ -1,0 +1,102 @@
+name: Publish images
+
+# Builds every image in this repo and pushes it to GHCR as
+# ghcr.io/fjacquet/dockerfiles/<image>. Runs on version tags so the published
+# tag matches the git tag, and on demand for a one-off rebuild.
+on:
+  push:
+    tags:
+      - 'v*'
+  # Pull requests build every image but push nothing, so a base-image or vendor
+  # repo change is proven to still build before it reaches master.
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      image:
+        description: Build a single image (leave empty to build all)
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  publish:
+    name: ${{ matrix.image }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        # Kept in sync with IMAGES in the Makefile.
+        image:
+          - consul
+          - esxicompcheck
+          - httpd
+          - mariadb
+          - ntp
+          - percona
+          - postfix
+          - powershell
+          - snmp
+          - uemcli
+          - vnxcli
+          - wordpress
+    steps:
+      - uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
+        with:
+          egress-policy: audit
+
+      # workflow_dispatch can target one image; the matrix still fans out, so
+      # the unwanted legs skip every remaining step rather than never starting.
+      - id: select
+        run: |
+          want='${{ inputs.image }}'
+          if [ -z "${want}" ] || [ "${want}" = "${{ matrix.image }}" ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.select.outputs.build == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - if: steps.select.outputs.build == 'true' && github.event_name != 'pull_request'
+        uses: docker/login-action@abd2ef45e78c5afb21d64d4ca52ee8550d9572c7 # v4.5.1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - if: steps.select.outputs.build == 'true'
+        id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.image }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest
+
+      - if: steps.select.outputs.build == 'true'
+        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
+
+      - if: steps.select.outputs.build == 'true'
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        with:
+          context: ${{ matrix.image }}
+          # amd64 only: percona, uemcli and vnxcli pin --platform=linux/amd64
+          # for vendor x86_64 binaries, and the rest have never been built or
+          # tested on arm64. Widen per image once each one is verified.
+          platforms: linux/amd64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ matrix.image }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.image }}
