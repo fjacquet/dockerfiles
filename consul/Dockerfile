@@ -1,6 +1,6 @@
 # docker build . -t consul --rm
 # docker run -ti consul
-FROM docker.io/library/alpine:3 AS builder
+FROM docker.io/library/alpine:3.24 AS builder
 
 ENV CONSUL_VERSION=1.22.3
 
@@ -16,7 +16,7 @@ RUN apk add --no-cache curl unzip && \
     unzip -d /tmp /tmp/consul.zip && \
     rm -f /tmp/consul.zip
 
-FROM docker.io/library/alpine:3
+FROM docker.io/library/alpine:3.24
 LABEL maintainer="Frederic Jacquet <fred@ljf.ch>" \
       org.opencontainers.image.title="consul" \
       org.opencontainers.image.description="HashiCorp Consul service mesh" \
