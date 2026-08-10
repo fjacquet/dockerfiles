@@ -4,14 +4,14 @@
 # Note: --platform=linux/amd64 is required because the vendor RPM is x86_64-only
 
 # Stage 1: Extract vendor RPM
-FROM --platform=linux/amd64 almalinux:9 AS builder
+FROM --platform=linux/amd64 docker.io/library/almalinux:9 AS builder
 COPY container-image-root /
 RUN dnf install -y libnsl && dnf clean all && rm -rf /var/cache/dnf
 RUN rpm -ivh NaviCLI-Linux-64-x86-en_US-7.33.9.1.84-1.x86_64.rpm && \
     /setlevel.sh
 
 # Stage 2: Minimal runtime
-FROM --platform=linux/amd64 almalinux:9
+FROM --platform=linux/amd64 docker.io/library/almalinux:9
 LABEL maintainer="Frederic Jacquet <fred@ljf.ch>" \
       org.opencontainers.image.title="vnxcli" \
       org.opencontainers.image.description="Dell EMC VNX CLI management tools" \

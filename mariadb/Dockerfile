@@ -1,7 +1,7 @@
 # This is basic mariadb image dockerfile
 # docker build . -t mariadb --rm
 # docker run -ti mariadb
-FROM almalinux:10
+FROM docker.io/library/almalinux:10
 LABEL maintainer="Frederic Jacquet <fred@ljf.ch>" \
       org.opencontainers.image.title="mariadb" \
       org.opencontainers.image.description="MariaDB database server" \

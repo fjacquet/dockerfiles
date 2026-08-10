@@ -3,7 +3,7 @@
 # docker run -ti powershell
 
 # Stage 1: Install PowerShell and modules
-FROM almalinux:10 AS builder
+FROM docker.io/library/almalinux:10 AS builder
 ARG PS_VERSION=7.5.4
 RUN dnf -y update && \
     dnf install -y curl tar gzip unzip libicu && \
@@ -42,7 +42,7 @@ RUN mkdir -p /root/.local/share/powershell/Modules && \
     rm -f /tmp/ucspowertoolcore.zip
 
 # Stage 2: Minimal runtime
-FROM almalinux:10
+FROM docker.io/library/almalinux:10
 LABEL maintainer="Frederic Jacquet <fred@ljf.ch>" \
       org.opencontainers.image.title="powershell" \
       org.opencontainers.image.description="PowerShell with VMware, Dell EMC, and AWS modules" \

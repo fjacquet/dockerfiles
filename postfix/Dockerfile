@@ -1,6 +1,6 @@
 # docker build . -t postfix --rm
 # docker run -ti postfix
-FROM alpine:3
+FROM docker.io/library/alpine:3
 LABEL maintainer="Frederic Jacquet <fred@ljf.ch>" \
       org.opencontainers.image.title="postfix" \
       org.opencontainers.image.description="Postfix mail transfer agent" \

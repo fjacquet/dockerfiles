@@ -1,7 +1,7 @@
 # This is VMware ESXi compatibility checker
 # docker build . -t esxicompcheck --rm
 # docker run -ti esxicompcheck
-FROM almalinux:10 AS builder
+FROM docker.io/library/almalinux:10 AS builder
 WORKDIR /root
 
 RUN dnf -y update && \
@@ -15,7 +15,7 @@ RUN pip3 install --no-cache-dir --prefix=/usr/local pyVim pyvmomi crypto pyopens
     unzip /root/compchecker-v1-20210219.zip && \
     rm -f /root/compchecker-v1-20210219.zip
 
-FROM almalinux:10
+FROM docker.io/library/almalinux:10
 LABEL maintainer="Frederic Jacquet <fred@ljf.ch>" \
       org.opencontainers.image.title="esxicompcheck" \
       org.opencontainers.image.description="VMware ESXi compatibility checker" \
